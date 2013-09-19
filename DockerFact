@@ -27,5 +27,5 @@ WORKDIR tesseract-ocr
 RUN ./autogen.sh
 RUN ./configure
 RUN make
-RUN sudo make install
-RUN sudo ldconfig
+RUN make install
+RUN ldconfig
