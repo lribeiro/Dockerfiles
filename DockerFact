@@ -1,0 +1,31 @@
+FROM ubuntu 
+
+MAINTAINER Luís Landeiro Ribeiro <luis.ribeiro@pdmfc.com>
+
+# Speed up apt-get avoid sync() calls after each package is installed
+RUN echo force-unsafe-io > /etc/dpkg/dpkg.cfg.d/02apt-speedup
+
+RUN echo "deb http://archive.ubuntu.com/ubuntu precise main universe" > /etc/apt/sources.list
+
+RUN apt-get update
+
+RUN apt-get -y install git-core curl
+
+RUN apt-get install -y autoconf automake libtool
+RUN apt-get install -y libpng12-dev
+RUN apt-get install -y libjpeg62-dev
+RUN apt-get install -y libtiff4-dev
+RUN apt-get install -y zlib1g-dev
+RUN apt-get install -y libleptonica-dev
+
+RUN curl -q -O https://tesseract-ocr.googlecode.com/files/tesseract-ocr-3.02.02.tar.gz
+RUN tar -xvzf tesseract-ocr-3.02.02.tar.gz
+
+RUN apt-get install -y build-essential
+
+WORKDIR tesseract-ocr
+RUN ./autogen.sh
+RUN ./configure
+RUN make
+RUN sudo make install
+RUN sudo ldconfig
